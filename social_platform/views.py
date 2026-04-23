@@ -18,10 +18,8 @@ def home(request):
 
         return redirect('home')
 
-    
     posts = Post.objects.all()
 
-   
     users = []
     requests = []
     notifications = []

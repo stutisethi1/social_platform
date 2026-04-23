@@ -5,11 +5,13 @@ from friends.models import FriendRequest
 from notifications.models import Notification
 
 def home(request):
-    if request.method == 'POST':
-        if request.user.is_authenticated:
-            content = request.POST.get('content')
-            image = request.FILES.get('image')
 
+    # Handle post creation
+    if request.method == 'POST' and request.user.is_authenticated:
+        content = request.POST.get('content')
+        image = request.FILES.get('image')
+
+        if content:
             Post.objects.create(
                 author=request.user,
                 content=content,
@@ -18,30 +20,25 @@ def home(request):
 
         return redirect('home')
 
-    posts = Post.objects.all()
+    # Get posts
+    posts = Post.objects.all().order_by('-created_at')
 
-    users = []
-    requests = []
-    notifications = []
-
+    # SAFE USER HANDLING
     if request.user.is_authenticated:
         query = request.GET.get('q')
-
+        
         if query:
-            users = User.objects.filter(
-                username__icontains=query
-            ).exclude(id=request.user.id)
+            users = User.objects.filter(username__icontains=query).exclude(id=request.user.id)
         else:
             users = User.objects.exclude(id=request.user.id)
 
-        requests = FriendRequest.objects.filter(
-            receiver=request.user,
-            is_accepted=False
-        )
+        requests = FriendRequest.objects.filter(receiver=request.user, is_accepted=False)
+        notifications = Notification.objects.filter(receiver=request.user)
 
-        notifications = Notification.objects.filter(
-            receiver=request.user
-        )
+    else:
+        users = []
+        requests = []
+        notifications = []
 
     return render(request, 'home.html', {
         'posts': posts,

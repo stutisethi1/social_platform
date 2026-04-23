@@ -9,6 +9,7 @@ SECRET_KEY = 'django-insecure-7tqp(cnx-g*du$(6*95-m+(u0*yeqzgk$9p9#16c0c8^%=&a=k
 
 DEBUG = False  
 ALLOWED_HOSTS = ['social-platform-f4p.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://social-platform-f4p.onrender.com']
 
 
 # APPS

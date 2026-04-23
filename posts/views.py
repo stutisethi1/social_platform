@@ -1,14 +1,12 @@
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, get_object_or_404
 from .models import Post
 
-@login_required
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
     if request.user in post.likes.all():
-        post.likes.remove(request.user)   # unlike
+        post.likes.remove(request.user)
     else:
-        post.likes.add(request.user)      # like
+        post.likes.add(request.user)
 
-    return redirect('home')  # change if your homepage name is different
+    return redirect('home')

@@ -6,10 +6,10 @@ from notifications.models import Notification
 
 def home(request):
     if request.method == 'POST':
-        content = request.POST.get('content')
-        image = request.FILES.get('image')
-
         if request.user.is_authenticated:
+            content = request.POST.get('content')
+            image = request.FILES.get('image')
+
             Post.objects.create(
                 author=request.user,
                 content=content,
@@ -18,16 +18,32 @@ def home(request):
 
         return redirect('home')
 
+    
     posts = Post.objects.all()
 
-    query = request.GET.get('q')
-    if query:
-        users = User.objects.filter(username__icontains=query).exclude(id=request.user.id)
-    else:
-        users = User.objects.exclude(id=request.user.id)
+   
+    users = []
+    requests = []
+    notifications = []
 
-    requests = FriendRequest.objects.filter(receiver=request.user, is_accepted=False)
-    notifications = Notification.objects.filter(receiver=request.user)
+    if request.user.is_authenticated:
+        query = request.GET.get('q')
+
+        if query:
+            users = User.objects.filter(
+                username__icontains=query
+            ).exclude(id=request.user.id)
+        else:
+            users = User.objects.exclude(id=request.user.id)
+
+        requests = FriendRequest.objects.filter(
+            receiver=request.user,
+            is_accepted=False
+        )
+
+        notifications = Notification.objects.filter(
+            receiver=request.user
+        )
 
     return render(request, 'home.html', {
         'posts': posts,

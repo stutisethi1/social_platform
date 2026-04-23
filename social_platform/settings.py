@@ -1,17 +1,17 @@
-
 from pathlib import Path
-import os  
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# SECURITY
 SECRET_KEY = 'django-insecure-7tqp(cnx-g*du$(6*95-m+(u0*yeqzgk$9p9#16c0c8^%=&a=k'
 
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
+DEBUG = False  
+ALLOWED_HOSTS = ['social-platform-f4p.onrender.com']
 
 
+# APPS
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -30,10 +30,11 @@ INSTALLED_APPS = [
 ]
 
 
+# MIDDLEWARE
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
-
+    # WhiteNoise for static files
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -48,6 +49,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'social_platform.urls'
 
 
+# TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -67,7 +69,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'social_platform.wsgi.application'
 
 
-
+# DATABASE
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -76,7 +78,7 @@ DATABASES = {
 }
 
 
-
+# PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -85,25 +87,24 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-
+# INTERNATIONALIZATION
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
 
-
-
+# STATIC FILES
 STATIC_URL = '/static/'
-
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
+# MEDIA FILES (for images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
+# DEFAULT PK
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
